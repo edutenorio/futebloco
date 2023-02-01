@@ -1,0 +1,86 @@
+{% load static %}
+                <!-- Fixtures -->
+                <div class="container paddings-mini">
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <h3 class="clear-title">Partidas</h3>
+                        </div>
+
+                        <div class="col-lg-12">
+                            {% if matches %}
+                            <table class="table-striped table-responsive table-hover result-point">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">NO</th>
+                                        {% if show_group %}
+                                            <th>Grupo</th>
+                                        {% endif %}
+                                        <th>Time A</th>
+                                        <th class="text-center" colspan="3">VS</th>
+                                        <th>Time B</th>
+                                        <th>Dia / Horário</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for match in matches %}
+                                    <tr>
+                                        <td class="text-center">{{match.matchno}}</td>
+                                        {% if show_group %}
+                                            <td class="text-center">{{match.group}}</td>
+                                        {% endif %}
+                                        <td class="text-left">
+                                            <a href="{% url 'single-team' %}?season={{season_id}}&tournament={{match.group.tournament_id}}&team={{match.hometeamreg.team.id}}">
+                                                <img src="{{match.hometeamreg.team.logo.thumb.url}}"
+                                                             alt="{{match.hometeamreg.team.short}}"
+                                                             width="25" height="25">
+                                                {{match.hometeamreg.team.name}}
+                                            </a>
+                                        </td>
+                                        {% if match.status.id > 1 %}
+                                            <td class="text-center">
+                                                {{ match.get_homescore }}
+                                                {% if match.group.gamestage.id > 1 and match.is_draw == 1 %}
+                                                    <small class="meta-text">
+                                                    ({{match.get_hometiebreakscore}})
+                                                    </small>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{% url 'single-result' %}?season={{season.id}}&match={{match.id}}">
+                                                    vs
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                {% if match.group.gamestage.id > 1 and match.is_draw == 1 %}
+                                                    <small class="meta-text">
+                                                        ({{match.get_awaytiebreakscore}})
+                                                    </small>
+                                                {% endif %}
+                                                {{match.get_awayscore}}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center" colspan="3"><a href="match_details.html">vs</a></td>
+                                        {% endif %}
+                                        <td class="text-left">
+                                            <a href="{% url 'single-team' %}?season={{season_id}}&tournament={{match.group.tournament_id}}&team={{match.awayteamreg.team.id}}">
+                                                <img src="{{match.awayteamreg.team.logo.thumb.url}}"
+                                                             alt="{{match.awayteamreg.team.short}}"
+                                                             width="25" height="25">
+                                                {{match.awayteamreg.team.name}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {{match.datetime}}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p>Nenhuma Partida Encontrada</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- End Fixtures -->

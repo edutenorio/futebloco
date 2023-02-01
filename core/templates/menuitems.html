@@ -1,0 +1,62 @@
+{% load static %}
+                        <li class="current">
+                            <a href="{% url 'index' %}?season={{season.id}}">Início</a>
+                        </li>
+
+                        <li class="current">
+                            <a href="#">Grupos</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li>
+                                        <a href="{% url 'groups' %}?season={{season.id}}&tournament={{tournament.id}}">
+                                            {{ tournament.name }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'fixtures' %}?season={{season.id}}">Jogos</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li>
+                                        <a href="{% url 'fixtures' %}?season={{season.id}}&tournament={{tournament.id}}">
+                                            {{ tournament.name }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="#">Times</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                        <li>
+                                            <a href="{% url 'teams' %}?season={{season.id}}&tournament={{tournament.id}}">
+                                                {{ tournament.name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'teams'%}?season={{season.id}}">Jogadores</a>
+                            {% if tournaments %}
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                        <li>
+                                            <a href="{% url 'teams' %}?season={{season.id}}&tournament={{tournament.id}}">
+                                                {{ tournament.name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+
+                        <li>
+                            <a href="contact.html">Contato</a>
+                        </li>
