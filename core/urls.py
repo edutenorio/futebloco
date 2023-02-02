@@ -9,5 +9,5 @@ urlpatterns = [
     path('single-reuslt/', SingleResultView.as_view(), name='single-result'),
     path('fixtures/', FixturesView.as_view(), name='fixtures'),
     path('teams/', TeamsView.as_view(), name='teams'),
-    path('single-team', SingleTeamView.as_view(), name='single-team'),
+    path('single-team/', SingleTeamView.as_view(), name='single-team'),
 ]
