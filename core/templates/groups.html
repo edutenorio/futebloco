@@ -40,7 +40,7 @@
                                     <ul>
                                         {% for teamreg in group.teams.all %}
                                         <li>
-                                            <a href="{% url 'single-team' %}?season={{season.id}}&&tournament={{teamreg.tournament_id}}team={{teamreg.team.id}}">
+                                            <a href="{% url 'single-team' %}?season={{season.id}}&tournament={{teamreg.tournament_id}}&team={{teamreg.team.id}}">
                                                 {% if teamreg.team.logo %}
                                                     <img src="{{teamreg.team.logo.thumb.url}}"
                                                          alt="{{teamreg.team.short}}" width="46" height="46"
