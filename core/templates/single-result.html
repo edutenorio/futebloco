@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block sectitle %}
+    {% include "match-result-timeline.html" %}
+{% endblock %}
+
+{% block content %}
+                <!-- Single Team Tabs -->
+                <div class="single-team-tabs">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Left Content - Tabs and Carousel -->
+                            <div class="col-xl-12 col-md-12">
+                                <!-- Nav Tabs -->
+                                <ul class="nav nav-tabs" id="myTab">
+                                    <li class="active"><a href="#stats" data-toggle="tab">Estatísticas</a></li>
+                                    <li><a href="#sheet" data-toggle="tab">Súmula</a></li>
+                                    {% if match.summarytext %}
+                                    <li><a href="#summary" data-toggle="tab">Resumo</a></li>
+                                    {% endif %}
+                                </ul>
+                                <!-- End Nav Tabs -->
+                            </div>
+
+                            <div class="col-lg-12">
+                                <!-- Content Tabs -->
+                                <div class="tab-content">
+
+                                    <!-- Tab One - stats -->
+                                    <div class="tab-pane active" id="stats">
+                                        {% include 'match-stats.html' %}
+                                    </div>
+                                    <!-- End Tab One - stats -->
+
+                                    <!-- Tab Two - Sumary -->
+                                    <div class="tab-pane" id="summary">
+
+                                        <div class="panel-box padding-b">
+                                            <div class="titles">
+                                                <h4>Resumo da Partida</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-xl-4">
+                                                    {% if match.summaryphoto %}
+                                                    <img src="{{match.summaryphoto.url}}" alt="">
+                                                    {% endif %}
+                                                </div>
+
+                                               <div class="col-lg-12 col-xl-8">
+                                                   <p>{{match.summarytext|linebreaks}}</p>
+                                               </div>
+                                           </div>
+                                       </div>
+                                    </div>
+                                    <!-- Tab Two - Sumary -->
+
+                                    <!-- Tab Three - Result Sheet -->
+                                    <div class="tab-pane" id="sheet">
+                                        {% include 'match-sheet.html' %}
+                                    </div>
+                                    <!-- Tab Three - Result Sheet -->
+
+
+                                </div>
+                                <!-- Content Tabs -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Team Tabs -->
+{% endblock %}

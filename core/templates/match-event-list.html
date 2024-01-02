@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block sectitle %}
+            <div class="section-title single-result" style="background:url({% static 'img/locations/3.jpg' %})">
+                <div class="container">
+                    <!-- Result Location -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>Editar Eventos</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+
+                <div class="single-team-tabs">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <br><h4 style="text-align:center">Eventos</h4><br>
+                            </div>
+                        </div>
+                        <form method="post" action="{% url 'match-event' %}">
+                            {% csrf_token %}
+
+                            <div class="row form-group">
+                                <table class="table-striped table-responsive table-hover">
+                                    <tr>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Hora</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Minutos Jogados</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Partida</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Jogador(a)</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Time</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important">Evento</th>
+                                        <th style="text-align:center;border:1px solid #ddd !important"></th>
+                                        <th style="text-align:center;border:1px solid #ddd !important"></th>
+                                    </tr>
+                                {% for matchevent in matchevents %}
+                                    <tr>
+                                        <td>{{matchevent.timestamp|date:'d/m/Y H:i:s'}}</td>
+                                        <td>{{matchevent.matchtimeminutes|floatformat:2}}</td>
+                                        <td>{{matchevent.match}}</td>
+                                        <td>({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}</td>
+                                        <td>{{matchevent.teamreg.team.name}}</td>
+                                        <td>{{matchevent.eventtype.name_ptbr}}</td>
+                                        <td><a href="{% url 'match-event-update' pk=matchevent.id %}?match={{matchevent.match.id}}">Editar</a></td>
+                                        <td><a href="{% url 'match-event-delete' pk=matchevent.id %}?match={{matchevent.match.id}}">Deletar</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </table>
+                                <a href="{% url 'match-input' %}?match={{matchevents.0.match.id}}"><input type="button" value="Voltar à partida" class="bnt btn-iw"></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+{% endblock %}
+

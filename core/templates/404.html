@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <div class="section-title" style="background:url(img/slide/1.jpg)">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Page 404</h1>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li>Não encontrado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+               <!-- Content Central -->
+                <section class="container">
+                    <div class="row">
+                        <div class="page-error">
+                            <h1>404 <i class="fa fa-unlink"></i></h1>
+                             <hr class="tall">
+                            <p class="lead">Não foi possível encontrar a página.</p>
+                            <a href="{% url 'index' %}" class="btn btn-lg btn-primary">Voltar ao Início</a>
+                        </div>
+                    </div>
+                </section>
+                <!-- End Content Central -->
+{% endblock %}

@@ -1,0 +1,149 @@
+{% load static %}
+{% load mathfilters %}
+            <div class="section-title single-result" style="background:url({% static 'img/locations/3.jpg' %})">
+                <div class="container">
+                    <!-- Result Location -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="result-location">
+                                <ul>
+                                    <li>
+                                        {{match.datetime}}
+                                    </li>
+
+                                    <li>
+                                        {% if match.venue.website %}
+                                            <a href="{{match.venue.website}}" target="_blank" style="color: #ffffff">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                {{match.venue.name}}
+                                            </a>
+                                        {% elif match.venue.address %}
+                                            <a href="{{gmaplink}}" target="_blank" style="color: #ffffff">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                {{match.venue.name}}
+                                            </a>
+                                        {% else %}
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            {{match.venue.name}}
+                                        {% endif %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Result Location -->
+
+                    <!-- Result -->
+                    <div class="row">
+                        <div class="col-md-5 col-lg-5">
+                            <div class="team">
+                                <img src="{{match.hometeamreg.team.logo.small.url}}" alt="{{match.hometeamreg.team.short}}" width="70" height="70">
+                                <a href="{% url 'single-team' %}?team={{match.hometeamreg.team.id}}">{{match.hometeamreg.team.name}}</a>
+                                <ul>
+                                    {% for matchevent in matchevents %}
+                                        {% if matchevent.eventtype.name == "goal" and matchevent.teamreg == match.hometeamreg %}
+                                            <li>({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                                <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                            </li>
+                                        {% elif matchevent.eventtype.name == "own goal" and matchevent.teamreg == match.awayteamreg %}
+                                            <li>({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}
+                                                (contra) {{matchevent.matchtimeminutes|floatformat:0}}'
+                                                <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-lg-2">
+                            <div class="result-match">
+                                {% if match.group.gamestage.id > 1 and match.is_draw == 1 %}
+                                    {{match.get_homescore}} ({{match.get_hometiebreakscore}}) : ({{match.get_awaytiebreakscore}}) {{match.get_awayscore}}
+                                {% else %}
+                                    {{match.get_homescore}} : {{match.get_awayscore}}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-lg-5">
+                            <div class="team right">
+                                <a href="{% url 'single-team' %}?team={{match.awayteamreg.team.id}}">{{match.awayteamreg.team.name}}</a>
+                                <img src="{{match.awayteamreg.team.logo.small.url}}" alt="{{match.awayteamreg.team.short}}" width="70" height="70">
+                                <ul>
+                                    {% for matchevent in matchevents %}
+                                        {% if matchevent.eventtype.name == "goal" and matchevent.teamreg == match.awayteamreg%}
+                                            <li>({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                                <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                            </li>
+                                        {% elif matchevent.eventtype.name == "own goal" and matchevent.teamreg == match.hometeamreg %}
+                                            <li>({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}
+                                                (contra) {{matchevent.matchtimeminutes|floatformat:0}}'
+                                                <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Result -->
+
+                    <!-- Timeline Result -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="timeline-result">
+                                <div class="team-timeline">
+                                    <img src="{{match.hometeamreg.team.logo.thumb.url}}" width="25" height="25">
+                                    <a href="{% url 'single-team' %}?team={{match.hometeamreg.team.id}}">{{match.hometeamreg.team.short}}</a>
+                                </div>
+                                <ul class="timeline">
+                                    {% for matchevent in matchevents %}
+                                        {% if matchevent.eventtype.name == "goal" %}
+                                            <li class="card-result {% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %} goal"
+                                                style="left:{{matchevent.matchtimeminutes|div:20|mul:80|add:10|floatformat:0}}%"
+                                                data-placement="{% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %}"
+                                                data-trigger="hover" data-toggle="popover" title="Gol"
+                                                data-content="({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}">
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                            </li>
+                                        {% elif matchevent.eventtype.name == "own goal" %}
+                                            <li class="card-result {% if matchevent.teamreg == match.awayteamreg %}top{% else %}bottom{% endif %} goal"
+                                                style="left:{{matchevent.matchtimeminutes|div:20|mul:80|add:10|floatformat:0}}%"
+                                                data-placement="{% if matchevent.teamreg == match.awayteamreg %}top{% else %}bottom{% endif %}"
+                                                data-trigger="hover" data-toggle="popover" title="Gol Contra"
+                                                data-content="({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}">
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                            </li>
+                                        {% elif matchevent.eventtype.name == "yellow card" %}
+                                            <li class="card-result {% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %} yellow"
+                                                style="left:{{matchevent.matchtimeminutes|div:20|mul:80|add:10|floatformat:0}}%"
+                                                data-placement="{% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %}"
+                                                data-trigger="hover" data-toggle="popover" title="Cartão Amarelo"
+                                                data-content="({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}">
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                            </li>
+                                        {% elif matchevent.eventtype.name == "red card" %}
+                                            <li class="card-result {% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %} red"
+                                                style="left:{{matchevent.matchtimeminutes|div:20|mul:80|add:10|floatformat:0}}%"
+                                                data-placement="{% if matchevent.teamreg == match.hometeamreg %}top{% else %}bottom{% endif %}"
+                                                data-trigger="hover" data-toggle="popover" title="Cartão Vermelho"
+                                                data-content="({{matchevent.playerreg.shirtno}}) {{matchevent.playerreg.person.short}}">
+                                                {{matchevent.matchtimeminutes|floatformat:0}}'
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="team-timeline">
+                                    <img src="{{match.awayteamreg.team.logo.thumb.url}}" width="25" height="25">
+                                    <a href="{% url 'single-team' %}?team={{match.awayteamreg.team.id}}">{{match.awayteamreg.team.short}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Timeline Result -->
+                </div>
+            </div>

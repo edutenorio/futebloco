@@ -1,0 +1,114 @@
+{% load static %}
+{% load mathfilters %}
+                                        <!-- Sheet -->
+                                        <div class="row match-stats">
+
+                                            <div class="col-lg-5" style="text-align:left">
+                                                {% if match.actualstart %}
+                                                Partida iniciada às {{match.actualstart|time:'H:i:s'}}
+                                                {% elif input_permission %}
+                                                <button class="match-event-button btn btn-iw" data-match={{match.id}} data-event=start_match" data-csrf_token="{{csrf_token}}">Marcar início da partida</button>
+                                                {% else %}
+                                                Início previsto: {{match.datetime|date:'d/m/Y H:i'}}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-2" style="text-align:center">
+                                                {% if match.actualstart and not match.actualfinish %}
+                                                <h1 id="timer"></h1>
+                                                <script>
+                                                    const timeElement = document.getElementById("timer");
+                                                    const isoStartTime = "{{ match.actualstart.isoformat }}"
+                                                    const startTime = new Date(isoStartTime)
+
+                                                    function updateElapsedTime() {
+                                                        var currentTime = new Date();
+                                                        var elapsedTime = currentTime - startTime;
+                                                        var minutes = Math.floor(elapsedTime / 60000);
+                                                        var seconds = Math.floor((elapsedTime % 60000) / 1000);
+                                                        timerStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                                                        timeElement.innerText = timerStr
+                                                    };
+
+                                                    updateElapsedTime();
+
+                                                    setInterval(updateElapsedTime, 1000);
+                                                </script>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-5" style="text-align:right">
+                                                {% if match.actualfinish %}
+                                                Partida finalizada às {{match.actualfinish|time:'H:i:s'}}
+                                                {% elif input_permission %}
+                                                <button class="match-event-button btn btn-iw" data-match="{{match.id}}" data-event="finish_match" data-csrf_token="{{csrf_token}}">Marcar fim da partida</button>
+                                                {% else %}
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="col-lg-5">
+                                                <div class="team">
+                                                    <img src="{{match.hometeamreg.team.logo.small.url}}"
+                                                         width="70" height="70">
+                                                    <a href="{% url 'single-team' %}?team={{match.hometeamreg.team.id}}">
+                                                        {{match.hometeamreg.team.name}}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="result-match">
+                                                    VS
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                <div class="team right">
+                                                    <a href="{% url 'single-team' %}?team={{match.awayteamreg.team.id}}">
+                                                        {{match.awayteamreg.team.name}}
+                                                    </a>
+                                                    <img src="{{match.awayteamreg.team.logo.small.url}}"
+                                                         width="70" height="70">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-5" style="text-align:center">
+                                                <h1{% if match.get_homefouls > 4 %} style="color:#ff0000;font-weight:bold"{% endif %}>{{match.get_homefouls}}</h1>
+                                            </div>
+                                            <div class="col-lg-2" style="text-align:center">
+                                                <h1>FALTAS</h1>
+                                            </div>
+                                            <div class="col-lg-5" style="text-align:center">
+                                                <h1{% if match.get_awayfouls > 4 %} style="color:#ff0000;font-weight:bold"{% endif %}>{{match.get_awayfouls}}</h1>
+                                            </div>
+
+                                            {% for table in team_tables %}
+                                            <div class="col-lg-6">
+                                                <table class="table-striped table-responsive table-hover">
+                                                    <tr>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Num</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Nome</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Gols</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Faltas</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Amarelo</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Vermelho</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Gol Contra</th>
+                                                        <th style="text-align:center;font-size:75%;border:1px solid #ddd !important">Desempate</th>
+                                                    </tr>
+                                                    {% for playerrow in table %}
+                                                    <tr>
+                                                        {% for playercolumn in playerrow %}
+                                                        <td style="{% if forloop.counter0 == 1 %}text-align:left{% else %}text-align:center{% endif %}">
+                                                            {% if forloop.counter0 < 2 %}
+                                                            {{playercolumn.0}}
+                                                            {% else %}
+                                                            {% if playercolumn.0 > 0 %}{{playercolumn.0}}{% endif %}
+                                                            {% if input_permission and forloop.counter0 > 1 %}
+                                                            <br><button class="match-event-button btn btn-sm" data-event="match_event" data-match="{{match.id}}" data-player="{{playercolumn.1}}" data-team="{{playercolumn.2}}" data-eventtype="{{playercolumn.3}}" data-csrf_token="{{csrf_token}}">+</button>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                        </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <!-- End Sheet -->

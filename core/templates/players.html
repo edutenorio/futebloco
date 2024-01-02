@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <div class="section-title" style="background:url({% static 'img/slide/1.jpg' %})">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {% if tournament %}
+                            <h1>{% if tournament.genre.id == 1 %}Jogadoras{% elif tournament.genre.id == 2 %}Jogadores{% else %}Jogadoras/Jogadores{% endif %}</h1>
+                            {% else %}
+                            <h1>Jogadoras/Jogadores</h1>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    {% if tournament %}
+                                    <li>{% if tournament.genre.id == 1 %}Jogadoras{% elif tournament.genre.id == 2 %}Jogadores{% else %}Jogadoras/Jogadores{% endif %}</li>
+                                    {% else %}
+                                    <li>Jogadoras/Jogadores</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+                {% if not tournament %}
+                <!-- Nav Filters -->
+                <div class="portfolioFilter">
+                    <div class="container">
+                        <h5><i class="fa fa-filter" aria-hidden="true"></i>Filtrar:</h5>
+                        <a href="#" data-filter="*" class="current">Todos</a>
+                        {% for genre in genre_filter %}
+                        <a href="#" data-filter=".genre_{{genre.id}}">{{genre.name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- End Nav Filters -->
+                {% endif %}
+
+                <div class="container padding-top">
+                    <div class="row portfolioContainer">
+                        {% for player in players %}
+                        <!-- Item Player -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 genre_{{player.teamreg.tournament.genre.id}}">
+                            {% include "player-box.html" %}
+                        </div>
+                        <!-- End Item Player -->
+                        {% endfor %}
+                    </div>
+                </div>
+{% endblock %}

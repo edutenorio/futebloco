@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <div class="section-title" style="background:url({% static 'img/slide/1.jpg' %})">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Grupos</h1>
+                            {% if tournaments|length == 1 %}<p>{{tournaments.0.name}}</p>{% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li>Grupos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+            {% for groups in groups_by_tournament %}
+                <div class="container padding-top">
+                    <div class="groups-list page-group">
+                        {% if tournaments|length > 1 %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h1>{{groups.0.tournament.name}}</h1>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            {% for group in groups %}
+                            <div class="col-lg-4 col-md-6">
+                                <h5>
+                                    <a href="{% url 'single-group' %}?group={{group.id}}">
+                                        {{group.name}}
+                                    </a>
+                                </h5>
+                                <div class="item-group">
+                                    <ul>
+                                        {% for teamreg in group.teams.all %}
+                                        <li>
+                                            <a href="{% url 'single-team' %}?team={{teamreg.team.id}}">
+                                                {% if teamreg.team.logo %}
+                                                    <img src="{{teamreg.team.logo.thumb.url}}"
+                                                         alt="{{teamreg.team.short}}" width="46" height="46"
+                                                         style="horizontal-align:center; object-fit: scale-down">
+                                                {% endif %}
+                                                {{teamreg.team.name}}
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="container padding-top">
+                    <div class="row">
+                        <div class="col">
+                            <h4>Nenhum grupo encontrado</h4>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <div class="section-title" style="background:url({% static 'img/slide/1.jpg' %})">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Times</h1>
+                            {% if tournaments|length == 1 %}<p>{{tournaments.0.name}}</p>{% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li>Times</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+                <!-- Nav Filters -->
+                <div class="portfolioFilter">
+                    <div class="container">
+                        <h5><i class="fa fa-filter" aria-hidden="true"></i>Filtrar por:</h5>
+                        <a href="#" data-filter="*" class="current">Tudo</a>
+                        {% for group in group_filter %}
+                        <a href="#" data-filter=".group_{{group.id}}">{% if tournaments|length > 1 %}{{group.tournament.genre.name}} {% endif %}{{group.name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- End Nav Filters -->
+
+                <div class="container padding-top">
+                    <div class="row portfolioContainer">
+                        {% for teamreg, group in teamregs_groups %}
+                        <!-- Item Team {{teamreg.group.name}}-->
+                        <div class="col-md-6 col-lg-4 col-xl-3 group_{{group.id}}">
+                            <div class="item-team">
+                                <div class="head-team">
+                                    {% if teamreg.photo %}
+                                    <img src="{{teamreg.photo.medium.url}}" alt="{{teamreg.team.short}}">
+                                    {% elif teamreg.team.photo %}
+                                    <img src="{{teamreg.team.photo.medium.url}}" alt="{{teamreg.team.short}}">
+                                    {% else %}
+                                    <img src="{% static 'img/clubs-teams/brazil.jpg' %}" alt="{{team.short}}">
+                                    {% endif %}
+                                    <div class="overlay"><a href="{% url 'single-team' %}?team={{teamreg.team.id}}">+</a></div>
+                                </div>
+                                <div class="info-team">
+                                    <span class="logo-team">
+                                        {% if teamreg.team.logo %}
+                                        <img src="{{teamreg.team.logo.small.url}}" alt="{{teamreg.team.short}}">
+                                        {% else %}
+                                        <img src="{% static 'img/clubs-logos/bra.png' %}" alt="{{teamreg.team.short}}">
+                                        {% endif %}
+                                    </span>
+                                    <h4>{{teamreg.team.name}}</h4>
+                                    <span class="group-team">
+                                        <i class="fa fa-trophy" aria-hidden="true"></i>
+                                        {{group.name}}
+                                    </span>
+                                </div>
+                                <a href="{% url 'single-team' %}?team={{teamreg.team.id}}" class="btn">Perfil do Time<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <!-- End Item Team {{group.name}}-->
+                        {% endfor %}
+                    </div>
+                </div>
+{% endblock %}

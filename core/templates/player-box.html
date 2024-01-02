@@ -1,0 +1,17 @@
+
+                                                <div class="item-player">
+                                                    <div class="head-player">
+                                                        <img src="{{player.person.photo.thumb.url}}" alt="{{player.person.name}}">
+                                                        <div class="overlay"><a href="{% url 'single-player' %}?player={{player.person.id}}">+</a></div>
+                                                    </div>
+                                                    <div class="info-player">
+                                                        <span class="number-player">{{player.shirtno}}</span>
+                                                        <h4>{{player.person.short}}<span>{% if player.position %}{{player.position}}{% endif %}</span></h4>
+                                                        <ul>
+                                                            {% if show_team %}<li><strong>TIME:</strong> <span>{% if player.teamreg.team.name|length < 31 %}{{player.teamreg.team.name}}{% else %}{{player.teamreg.team.short}}{% endif %}</span></li>{% endif %}
+                                                            <li><strong>IDADE:</strong> <span>{{player.person.get_age}}</span></li>
+                                                            <li><strong>TORNEIOS:</strong> <span>{{player.person.get_tournament_count}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <a href="{% url 'single-player' %}?player={{player.person.id}}" class="btn">Ver Perfil<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                                </div>

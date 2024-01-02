@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <div class="section-title" style="background:url({% static 'img/slide/1.jpg' %})">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>{{group.name}}</h1>
+                            <p>{{group.tournament.name}}</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li><a href="{% url 'groups' %}?tournament={{tournament.id}}">Grupos</a></li>
+                                    <li>{{group}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+                <!-- Points Table -->
+                <div class="container paddings-mini">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="clear-title">Tabela</h3>
+                            <table class="table-striped table-responsive table-hover result-point">
+                                <thead class="point-table-head">
+                                    <tr>
+                                        <th class="text-center">CL</th>
+                                        <th class="text-left">TIME</th>
+                                        <th class="text-center">PTS</th>
+                                        <th class="text-center">J</th>
+                                        <th class="text-center">V</th>
+                                        <th class="text-center">E</th>
+                                        <th class="text-center">D</th>
+                                        <th class="text-center">GP</th>
+                                        <th class="text-center">GC</th>
+                                        <th class="text-center">SG</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                {% for teamreg, team_results in group_results %}
+                                    <tr>
+                                        <td class="text-center number">{% cycle 1 2 3 4 %}<sup>o</sup></td>
+                                        <td class="text-left" style="vertical-align: middle;">
+                                            <a href="{% url 'single-team' %}?team={{teamreg.team.id}}">
+                                                <img src="{{teamreg.team.logo.thumb.url}}"
+                                                     alt="{{teamreg.team.short}}"
+                                                     width="25" height="25">
+                                                <span style="vertical-align: middle;">{{teamreg.team.name}}</span>
+                                            </a>
+                                        </td>
+                                        <td>{{team_results.points}}</td>
+                                        <td>{{team_results.matches}}</td>
+                                        <td>{{team_results.wins}}</td>
+                                        <td>{{team_results.draws}}</td>
+                                        <td>{{team_results.losses}}</td>
+                                        <td>{{team_results.goalsscored}}</td>
+                                        <td>{{team_results.goalsconceded}}</td>
+                                        <td>{{team_results.goaldifference}}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Points Table -->
+
+                {% include "fixtures-block.html" %}
+{% endblock %}

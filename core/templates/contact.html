@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sectitle %}
+            <!-- Google Map -->
+            <!--div id="map">
+                <iframe src="{{gmaplink}}" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div-->
+            <!-- End Google Map -->
+{% endblock %}
+
+{% block content %}
+                <div class="container">
+                    <div class="row paddings-mini">
+                        <!-- Left Content -->
+                        <div class="col-md-4">
+                            <aside class="panel-box">
+                                <div class="titles no-margin">
+                                    <h4>Escritório</h4>
+                                </div>
+                                <div class="info-panel">
+                                    <address>
+                                      <strong>Futebloco</strong><br>
+                                      <i class="fa fa-map-marker"></i><strong>Endereço: </strong>Bar do Augusto<br>
+                                      <i class="fa fa-plane"></i><strong>Cidade: </strong>Rio de Janeiro, RJ<br>
+                                      <i class="fa fa-phone"></i><strong>Whatsapp: </strong>(21) xxxx-xxxx
+                                    </address>
+                                </div>
+                            </aside>
+
+                            <aside class="panel-box">
+                                <div class="titles no-margin">
+                                    <h4>Contatos</h4>
+                                </div>
+                                <div class="info-panel">
+                                    <address>
+                                      <i class="fa fa-envelope"></i><strong>E-mail: </strong><a href="mailto:futebloco@gmail.com">futebloco@gmail.com</a><br>
+                                      <i class="fa fa-instagram"></i><strong>Instagram: </strong><a href="https://www.instagram.com/futebloco/">Futebloco</a><br>
+                                      <i class="fa fa-facebook"></i><strong>Facebook: </strong><a href="https://www.facebook.com/futebloco">Futebloco</a><br>
+                                      <i class="fa fa-phone"></i><strong>Whatsapp: </strong>(21) xxxx-xxxx
+                                    </address>
+                                </div>
+                            </aside>
+                        </div>
+                        <!-- End Left Content -->
+
+                        <!-- Right Content -->
+                        <div class="col-md-8">
+                            <div class="panel-box">
+                                <div class="titles no-margin">
+                                    <h4>Contacto</h4>
+                                </div>
+                                <div class="info-panel">
+                                    <!-- Form Contact -->
+                                    <form id="contact" method="post" enctype="multipart/form-data" action="{% url 'contact' %}" class="form-horizontal padding-top-mini">
+                                        {% csrf_token %}
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name_id" class="control-label">Nome completo *</label>
+                                                <input type="text"  required="required" value="" maxlength="100" class="form-control" name="name" id="name_id">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="email_id" class="control-label">Endereço de email *</label>
+                                                <input type="email"  required="required" value="" maxlength="100" class="form-control" name="email" id="email_id">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="subject_id" class="control-label">Assunto *</label>
+                                                <input type="text"  required="required" value="" maxlength="100" class="form-control" name="subject" id="subject_id">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="body_id" class="control-label">Conteúdo *</label>
+                                                <textarea maxlength="5000" rows="10" class="form-control" name="body"  style="height: 138px;" required="required" id="body_id"></textarea>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="submit" value="Enviar Mensagem" class="btn btn-lg btn-primary">
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- End Form Contact -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- Message -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Right Content -->
+                    </div>
+                </div>
+{% endblock %}

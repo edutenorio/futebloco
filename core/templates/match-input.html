@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block sectitle %}
+    {% include "match-result-timeline.html" %}
+{% endblock %}
+
+{% block content %}
+                <!-- Single Team Tabs -->
+                <div class="single-team-tabs">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Left Content - Tabs and Carousel -->
+                            <div class="col-xl-12 col-md-12">
+                                <!-- Nav Tabs -->
+                                <ul class="nav nav-tabs" id="myTab">
+                                    <li class="active"><a href="#sheet" data-toggle="tab">Súmula</a></li>
+                                    <li><a href="#stats" data-toggle="tab">Estatísticas</a></li>
+                                </ul>
+                                <!-- End Nav Tabs -->
+                            </div>
+
+                            <div class="col-lg-12">
+                                <!-- Content Tabs -->
+                                <div class="tab-content">
+                                    <!-- Tab One - Input Sheet -->
+                                    <div class="tab-pane active" id="sheet">
+                                        {% include 'match-sheet.html' %}
+                                        <div class="col-lg-12">
+                                            <a href="{% url 'match-event' %}?match={{match.id}}"><input type="submit" value="Corrigir Eventos" class="bnt btn-iw"></a>
+                                        </div>
+                                    </div>
+                                    <!-- Tab One - Input Sheet -->
+
+                                    <!-- Tab Two - Stats -->
+                                    <div class="tab-pane" id="stats">
+                                        {% include 'match-stats.html' %}
+                                    </div>
+                                    <!-- Tab Two - Stats -->
+                                </div>
+                                <!-- Content Tabs -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Team Tabs -->
+{% endblock %}

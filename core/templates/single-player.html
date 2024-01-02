@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+
+{% block sectitle %}
+        {% if playerreg.teamreg.tournament.genre.id == 2 %}
+            <div class="section-title single-player" style="background:url({% static 'img/slide/3.jpg' %})">
+        {% else %}
+            <div class="section-title single-player" style="background:url({% static 'img/slide/4.jpg' %})">
+        {% endif %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Perfil de Jogador{% if playerreg.teamreg.tournament.genre.id == 1 %}a{% endif %}</h1>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li>Jogador{% if playerreg.teamreg.tournament.genre.id == 1 %}a{% endif %}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+                {% if playerreg %}
+                <!-- Single Player Tabs -->
+                <div class="single-player-tabs">
+                   <div class="container">
+                        <div class="row">
+                            <!-- Side info single player-->
+                            <div class="col-lg-4 col-xl-3">
+
+                                <div class="item-player single-player">
+                                    <div class="head-player">
+                                        <img src="{{playerreg.person.photo.large.url}}" alt="{{playerreg.person.short}}">
+                                    </div>
+                                    <div class="info-player">
+                                        <span class="number-player">
+                                            {{playerreg.shirtno}}
+                                        </span>
+                                        <h4>
+                                            {{playerreg.person.short}}
+                                            <span>{{playerreg.position}}</span>
+                                        </h4>
+                                        <ul>
+                                            <li><strong>IDADE:</strong> <span>{{playerreg.person.get_age}}</span></li>
+                                            <li><strong>PARTICIPAÇÕES:</strong> <span>{{playerreg.person.get_tournament_count}}</span></li>
+                                            <li><strong>JOGOS:</strong> <span>{{playerreg.person.get_match_count}}</span></li>
+                                            <li><strong>ÚLTIMO TIME:</strong> <span><img src="{{playerreg.teamreg.team.logo.thumb.url}}" alt=""> {{playerreg.teamreg.team.name}} </span></li>
+                                            <li><strong>GOLS:</strong> <span>{{playerreg.person.get_goal_count}}</span></li>
+                                        </ul>
+
+                                        {% if playerreg.person.facebook or playerreg.person.twitter or playerreg.person.instagram %}
+                                        <h6>Seguir {{playerreg.person.short}}</h6>
+
+                                        <ul class="social-player">
+                                            {% if playerreg.person.facebook %}
+                                            <li>
+                                                <div>
+                                                    <a href="{{playerreg.person.facebook}}" class="facebook">
+                                                        <i class="fa fa-facebook"></i>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            {% endif %}
+                                            {% if playerreg.person.twitter %}
+                                            <li>
+                                                <div>
+                                                    <a href="{{playerreg.person.twitter}}" class="twitter-icon">
+                                                        <i class="fa fa-twitter"></i>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            {% endif %}
+                                            {% if playerreg.person.instagram %}
+                                            <li>
+                                                <div>
+                                                    <a href="{{playerreg.person.instagram}}" class="instagram">
+                                                        <i class="fa fa-instagram"></i>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Attack -->
+                                <div class="panel-box">
+                                    <div class="titles no-margin">
+                                        <h4><i class="fa fa-user"></i>Ficha Técnica</h4>
+                                    </div>
+                                    <ul class="list-panel">
+                                        {% if playerreg.person.height %}<li><p>Altura <span>{{playerreg.person.height|floatformat:2}} m</span></p></li>{% endif %}
+                                        {% if playerreg.person.weight %}<li><p>Peso <span>{{playerreg.person.weight|floatformat:0}} kg</span></p></li>{% endif %}
+                                        {% if playerreg.person.hood %}<li><p>Natural <span>{{playerreg.person.hood}}</span></p></li>{% endif %}
+                                        {% if playerreg.person.dob %}<li><p>Nascimento <span>{{playerreg.person.dob|date:"d M Y"}}</span></p></li>{% endif %}
+                                    </ul>
+                                </div>
+                                <!-- End Attack -->
+                            </div>
+                            <!-- end Side info single player-->
+
+                            <div class="col-lg-8 col-xl-9">
+                                <!-- Nav Tabs -->
+                                <ul class="nav nav-tabs" id="myTab">
+                                   <li class="active"><a href="#overview" data-toggle="tab">Sobre</a></li>
+                                   <li><a href="#career" data-toggle="tab">Histórico</a></li>
+                                   <li><a href="#stats" data-toggle="tab">Estatísticas</a></li>
+                                </ul>
+                                <!-- End Nav Tabs -->
+
+                                <!-- Content Tabs -->
+                                <div class="tab-content">
+                                    <!-- Tab One - overview -->
+                                    <div class="tab-pane active" id="overview">
+
+                                        <div class="panel-box padding-b">
+                                          <div class="titles">
+                                              <h4>Sobre {{playerreg.person.short}}</h4>
+                                          </div>
+                                            <div class="row">
+                                               <div class="col-lg-12 col-xl-4">
+                                                   <img src="{{playerreg.person.photo.large.url}}" alt="">
+                                               </div>
+
+                                               <div class="col-lg-12 col-xl-8">
+                                                   {% for row in about %}
+                                                   <p>{{row}}</p>
+                                                   {% endfor %}
+                                               </div>
+                                           </div>
+                                       </div>
+                                    </div>
+                                    <!-- Tab One - overview -->
+
+                                    <!-- Tab Theree - career -->
+                                    <div class="tab-pane" id="career">
+                                        <div class="col-lg-12">
+                                            <table class="table-striped table-responsive table-hover career">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Edição</th>
+                                                        <th>Time</th>
+                                                        <th>Jogos</th>
+                                                        <th>Gols</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for reg in playerregs %}
+                                                    <tr>
+                                                        <td>{{reg.teamreg.tournament.name}}</td>
+                                                        <td><img src="{{reg.teamreg.team.logo.thumb.url}}" alt="">{{reg.teamreg.team.name}}</td>
+                                                        <td>{{reg.teamreg.get_match_count}}</td>
+                                                        <td>{{reg.get_goal_count}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- Tab Theree - career -->
+
+                                    <!-- Tab Theree - stats -->
+                                    <div class="tab-pane" id="stats">
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="stats-info">
+                                                    <ul>
+                                                        <li>Jogos<h3>{{playerreg.person.get_match_count}}</h3></li>
+                                                        <li>Gols<h3>{{playerreg.person.get_goal_count}}</h3></li>
+                                                        <li>Vitórias<h3>{{playerreg.person.get_win_count}}</h3></li>
+                                                        <li>Derrotas<h3>{{playerreg.person.get_loss_count}}</h3></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Attack -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Ataque</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Gols <span>{{playerreg.person.get_goal_count}}</span></p></li>
+                                                        <li><p>Gols por Jogo <span>{{playerreg.person.get_goal_count|div:playerreg.person.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Gols em Decisão por Pênaltis <span>{{playerreg.person.get_tiebreakgoal_count}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Attack -->
+                                            </div>
+
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Discipline -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Disciplina</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Faltas <span>{{playerreg.person.get_foul_count}}</span></p></li>
+                                                        <li><p>Faltas por Jogo <span>{{playerreg.person.get_foul_count|div:playerreg.person.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Cartões Amarelos <span>{{playerreg.person.get_yellowcard_count}}</span></p></li>
+                                                        <li><p>Cartões Vermelhos <span>{{playerreg.person.get_redcard_count}}</span></p></li>
+                                                        <li><p>Cartões Amarelos por Torneio <span>{{playerreg.person.get_yellowcard_count|div:playerreg.person.get_tournament_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Cartões Vermelhos por Torneio <span>{{playerreg.person.get_redcard_count|div:playerreg.person.get_tournament_count|floatformat:2}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Discipline -->
+                                            </div>
+
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Defense -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Defesa</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Jogos sem Levar Gol <span>{{playerreg.person.get_cleansheet_count}}</span></p></li>
+                                                        <li><p>Gols Sofridos <span>{{playerreg.person.get_goalconceded_count}}</span></p></li>
+                                                        <li><p>Gols Sofridos por Jogo <span>{{playerreg.person.get_goalconceded_count|div:playerreg.person.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Gols Contra <span>{{playerreg.person.get_owngoal_count}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Defense -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- End Tab Theree - stats -->
+                                </div>
+                                <!-- Content Tabs -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Player Tabs -->
+                {% else %}
+
+                {% endif %}
+{% endblock %}

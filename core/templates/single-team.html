@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block sectitle %}
+            <div class="section-title-team">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-7">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{{team.logo.standard.url}}" alt="">
+                                </div>
+
+                                <div class="col-md-9">
+                                    <h1>{{team.name}}</h1>
+                                    <ul class="general-info">
+                                        <li><h6><strong>Abreviação:</strong> {{team.short}}</h6></li>
+                                        <li><h6><strong>Responsável:</strong> {{team.admin.name}}</h6></li>
+                                        {% if teamreg %}
+                                        <li><h6><strong>Capitão:</strong> {{teamreg.capitain.name}}</h6></li>
+                                        {% endif %}
+                                        {% if team.website %}
+                                        <li>
+                                            <h6>
+                                                <i class="fa fa-link" aria-hidden="true"></i>
+                                                <a href="https://themeforest.net/user/iwthemes/portfolio?ref=iwthemes" target="_blank">{{team.website}}</a>
+                                            </h6>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+
+                                    <ul class="social-teams">
+                                        {% if teamreg.team.facebook %}
+                                        <li>
+                                            <div>
+                                                <a href="{{teamreg.team.facebook}}" class="facebook">
+                                                    <i class="fa fa-facebook"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+                                        {% if teamreg.team.instagram %}
+                                        <li>
+                                            <div>
+                                                <a href="{{teamreg.team.instagram}}" class="instagram">
+                                                    <i class="fa fa-instagram"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+                                        {% if teamreg.team.twitter %}
+                                        <li>
+                                            <div>
+                                                <a href="{{teamreg.team.twitter}}" class="twitter-icon">
+                                                    <i class="fa fa-twitter"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+                                        {% if teamreg.team.youtube %}
+                                        <li>
+                                            <div>
+                                                <a href="#" class="youtube">
+                                                    <i class="fa fa-youtube"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if teamreg.photo %}
+                <div class="bg-image-team" style="background:url({{teamreg.photo.large.url}}) no-repeat center center;"></div>
+                {% elif teamreg.team.photo %}
+                <div class="bg-image-team" style="background:url({{teamreg.team.photo.large.url}}) no-repeat center center;"></div>
+                {% else %}
+                <div class="bg-image-team" style="background:url({% static 'img/clubs-teams/brazil.jpg' %});"></div>
+                {% endif %}
+            </div>
+{% endblock %}
+
+{% block content %}
+                <!-- Single Team Tabs -->
+                <div class="single-team-tabs">
+                   <div class="container">
+                        <div class="row">
+                            <!-- Left Content - Tabs and Carousel -->
+                            <div class="col-xl-12 col-md-12">
+                                <!-- Nav Tabs -->
+                                <ul class="nav nav-tabs" id="myTab">
+                                   <li class="active"><a href="#overview" data-toggle="tab">Geral</a></li>
+                                   <li><a href="#squad" data-toggle="tab">
+                                       {% if teamreg.tournament.genre.name == "Masculino" %}
+                                       Jogadores
+                                       {% elif teamreg.tournament.genre.name == "Feminino" %}
+                                       Jogadoras
+                                       {% else %}
+                                       Jogadorxs
+                                       {% endif %}
+                                   </a></li>
+                                   <li><a href="#fixtures" data-toggle="tab">Jogos</a></li>
+                                   <li><a href="#results" data-toggle="tab">Resultados</a></li>
+                                   <li><a href="#stats" data-toggle="tab">Estatísticas</a></li>
+                                </ul>
+                                <!-- End Nav Tabs -->
+                            </div>
+
+                            <div class="col-lg-9 padding-top-mini">
+                                <!-- Content Tabs -->
+                                <div class="tab-content">
+                                    <!-- Tab One - overview -->
+                                    <div class="tab-pane active" id="overview">
+
+                                       <div class="panel-box padding-b">
+                                          <div class="titles">
+                                              <h4>{{teamreg.team.name}}</h4>
+                                          </div>
+                                            <div class="row">
+                                               <div class="col-lg-12 col-xl-4">
+                                                   <img src="{{teamreg.team.logo.standard.url}}" alt="">
+                                               </div>
+
+                                               <div class="col-lg-12 col-xl-8">
+                                                   <p>{{teamreg.team.description|linebreaks}}</p>
+                                               </div>
+                                           </div>
+                                       </div>
+
+                                    </div>
+                                    <!-- Tab One - overview -->
+
+                                    <!-- Tab Two - squad -->
+                                    <div class="tab-pane" id="squad">
+                                        <div class="row">
+                                            {% for player in players %}
+                                            <!-- Item Player -->
+                                            <div class="col-xl-4 col-lg-6 col-md-6">
+                                                {% include "player-box.html" %}
+                                            </div>
+                                            <!-- End Item Player -->
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <!-- End Tab Two - squad -->
+
+                                    <!-- Tab Theree - fixtures -->
+                                    <div class="tab-pane" id="fixtures">
+
+                                        <table class="table-striped table-responsive table-hover result-point">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time A</th>
+                                                    <th class="text-center">vs</th>
+                                                    <th>Time B</th>
+                                                    <th>Detalhes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for match in matches %}
+                                                <tr>
+                                                    <td>
+                                                        <img src="{{match.hometeamreg.team.logo.thumb.url}}" alt="icon">
+                                                        <strong>{{match.hometeamreg.team.name}}</strong><br>
+                                                        <small class="meta-text">
+                                                            {% if match.group.gamestage.id == 1 %}
+                                                                {{match.group.name}}
+                                                            {% else %}
+                                                                {{match.group.gamestage.name}}
+                                                            {% endif %}
+                                                        </small>
+                                                    </td>
+                                                    <td class="text-center"><a href="{% url 'single-result' %}?match={{match.id}}">vs</a></td>
+                                                    <td>
+                                                        <img src="{{match.awayteamreg.team.logo.thumb.url}}" alt="icon">
+                                                        <strong>{{match.awayteamreg.team.name}}</strong><br>
+                                                        <small class="meta-text">
+                                                            {% if match.group.gamestage.id == 1 %}
+                                                                {{match.group.name}}
+                                                            {% else %}
+                                                                {{match.group.gamestage.name}}
+                                                            {% endif %}
+                                                        </small>
+                                                    </td>
+                                                    <td>
+                                                        {{match.datetime|date:'d M y, H:i'}}<br>
+                                                        <small class="meta-text">{{match.venue.name}}</small>
+                                                    </td>
+                                                </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="4">Nenhuma partida encontrada</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <!-- End Tab Theree - fixtures -->
+
+                                    <!-- Tab Theree - results -->
+                                    <div class="tab-pane" id="results">
+                                        <div class="recent-results results-page">
+                                            <div class="info-results">
+                                                <ul>
+                                                    {% for match in matches %}
+                                                    <li>
+                                                        <span class="head">
+                                                            {{match.hometeamreg.team.name}} vs {{match.awayteamreg.team.name}} <span class="date">{{match.datetime|date:'d M Y'}}</span>
+                                                        </span>
+
+                                                        <div class="goals-result">
+                                                            <a href="{% url 'single-team' %}?team={{match.hometeamreg.team.id}}">
+                                                                <img src="{{match.hometeamreg.team.logo.thumb.url}}" alt="">
+                                                                {{match.hometeamreg.team.short}}
+                                                            </a>
+
+                                                            <span class="goals">
+                                                                <b>{{match.get_homescore}}</b> - <b>{{match.get_awayscore}}</b>
+                                                                <a href="{% url 'single-result' %}?match={{match.id}}" class="btn theme">Detalhes</a>
+                                                            </span>
+
+                                                            <a href="{% url 'single-team' %}?team={{match.awayteamreg.team.id}}">
+                                                                <img src="{{match.awayteamreg.team.logo.thumb.url}}" alt="">
+                                                                {{match.awayteamreg.team.short}}
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                    {% empty %}
+                                                        <li>Nenhuma partida encontrada</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                       </div>
+                                    </div>
+                                    <!-- End Tab Theree - results -->
+
+                                    <!-- Tab Theree - stats -->
+                                    <div class="tab-pane" id="stats">
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="stats-info">
+                                                    <ul>
+                                                        <li>
+                                                            Torneios
+                                                            <h3>{{team.get_tournament_count}}</h3>
+                                                        </li>
+                                                        <li>
+                                                            Títulos
+                                                            <h3>{{team.get_title_count}}</h3>
+                                                        </li>
+                                                        {% if team.get_runnerup_count > 0 %}
+                                                        <li>
+                                                            Vices
+                                                            <h3>{{team.get_runnerup_count}}</h3>
+                                                        </li>
+                                                        {% endif %}
+                                                        {% if team.get_thirdplace_count > 0 %}
+                                                        <li>
+                                                            Terceiro
+                                                            <h3>{{team.get_thirdplace_count}}</h3>
+                                                        </li>
+                                                        {% endif %}
+                                                        <li>
+                                                            Partidas
+                                                            <h3>{{team.get_match_count}}</h3>
+                                                        </li>
+
+                                                        <li>
+                                                            Vitórias
+                                                            <h3>{{team.get_win_count}}</h3>
+                                                        </li>
+
+                                                        <li>
+                                                            Derrotas
+                                                            <h3>{{team.get_loss_count}}</h3>
+                                                        </li>
+                                                        <li>
+                                                            Goals Marcados
+                                                            <h3>{{team.get_goalscored_count}}</h3>
+                                                        </li>
+                                                        <li>
+                                                            Gols Sofridos
+                                                            <h3>{{team.get_goalconceded_count}}</h3>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Attack -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Ataque</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Gols <span>{{team.get_goalscored_count}}</span></p></li>
+                                                        <li><p>Gols por Jogo <span>{{team.get_goalscored_count|div:team.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Gols em Decisão por Pênaltis <span>{{team.get_tiebreakgoalscored_count}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Attack -->
+                                            </div>
+
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Attack -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Disciplina</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Faltas <span>{{team.get_foul_count}}</span></p></li>
+                                                        <li><p>Faltas Sofridas <span>{{team.get_foulagainst_count}}</span></p></li>
+                                                        <li><p>Faltas por jogo <span>{{team.get_foul_count|div:team.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Faltas Sofridas por jogo <span>{{team.get_foulagainst_count|div:team.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Cartões Amarelos <span>{{team.get_yellowcard_count}}</span></p></li>
+                                                        <li><p>Cartões Vermelhos <span>{{team.get_redcard_count}}</span></p></li>
+                                                        <li><p>Cartões Amarelos por Torneio <span>{{team.get_yellowcard_count|div:team.get_tournament_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Cartões Vermelhos por Torneio <span>{{team.get_redcard_count|div:team.get_tournament_count|floatformat:2}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Attack -->
+                                            </div>
+
+                                            <div class="col-lg-6 col-xl-4">
+                                                <!-- Attack -->
+                                                <div class="panel-box">
+                                                    <div class="titles no-margin">
+                                                        <h4><i class="fa fa-calendar"></i>Defesa</h4>
+                                                    </div>
+                                                    <ul class="list-panel">
+                                                        <li><p>Jogos sem Levar Gol <span>{{team.get_cleansheet_count}}</span></p></li>
+                                                        <li><p>Gols Sofridos <span>{{team.get_goalconceded_count}}</span></p></li>
+                                                        <li><p>Gols Sofridos por Jogo <span>{{team.get_goalconceded_count|div:team.get_match_count|floatformat:2}}</span></p></li>
+                                                        <li><p>Gols Contra <span>{{team.get_owngoal_count}}</span></p></li>
+                                                        <li><p>Gols Sofridos em Decisão por Pênaltis <span>{{team.get_tiebreakgoalconceded_count}}</span></p></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- End Attack -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- End Tab Theree - stats -->
+                                </div>
+                                <!-- Content Tabs -->
+                            </div>
+
+                            <!-- Side info single team-->
+                            <div class="col-lg-3 padding-top-mini">
+                               <!-- Diary -->
+                                <div class="panel-box">
+                                    <div class="titles">
+                                        <h4><i class="fa fa-calendar"></i>Calendário</h4>
+                                    </div>
+
+                                    <!-- List Diary -->
+                                    <ul class="list-diary">
+
+                                        {% for match in matches|slice:4 %}
+                                        <!-- Item List Diary -->
+                                        <li>
+                                            <h6>{% if match.group.gamestage.id == 1 %} {{match.group.name}} {% else %} {{match.group.gamestage.name}} {% endif %} <span>{{match.datetime|date:'d M Y - H:i'}}</span></h6>
+                                            <ul class="club-logo">
+                                                <li>
+                                                    <img src="{{match.hometeamreg.team.logo.thumb.url}}" alt="">
+                                                    <span>{{match.hometeamreg.team.name}}</span>
+                                                </li>
+                                                <li>
+                                                    <img src="{{match.awayteamreg.team.logo.thumb.url}}" alt="">
+                                                    <span>{{match.awayteamreg.team.name}}</span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!-- End Item List Diary -->
+                                        {% endfor %}
+                                    </ul>
+                                    <!-- End List Diary -->
+                                </div>
+                                <!-- End Diary -->
+
+                            </div>
+                            <!-- end Side info single team-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- End Single Team Tabs -->
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block sectitle %}
+            <div class="section-title single-result" style="background:url({% static 'img/locations/1.jpg' %})">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>Premiações</h1>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="{% url 'index' %}">Início</a></li>
+                                    <li>Premiações</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+                <!-- White Section -->
+                <div class="white-section paddings">
+                    <div class="container">
+                        <div class="row padding-top">
+                            {% with l=tournaments|length %}
+                            {% for tournament, topscorer, fairplay in tournament_topscorer_fairplay %}
+                            <div class="col-md-12 col-xl-6">
+                                <div class="item-boxed-service">
+                                    <h4>Artilharia</h4>
+                                    <h5>{{tournament.name}}</h5>
+                                    <table class="table-striped table-responsive table-hover ">
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">Gols</th>
+                                            <th class="text-center">Jogador{% if tournament.genre.id == 1%}a{% endif %}</th>
+                                            <th class="text-center">Time</th>
+                                        </tr>
+                                        {% for player in topscorer %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter0|add:1}}</td>
+                                            <td class="text-center">{{player.get_goal_count}}</td>
+                                            <td class="text-left"><a href="{% url 'single-player' %}?player={{player.person.id}}">{{player.person.short}}</a></td>
+                                            <td class="text-left"><a href="{% url 'single-team' %}?team={{player.teamreg.team.id}}">{{player.teamreg.team.name}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-6">
+                                <div class="item-boxed-service">
+                                    <h4>Fair Play</h4>
+                                    <h5>{{tournament.name}}</h5>
+                                    <table class="table-striped table-responsive table-hover ">
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">Faltas por Jogo</th>
+                                            <th class="text-center">Time</th>
+                                        </tr>
+                                        {% for teamreg in fairplay %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter0|add:1}}</td>
+                                            <td class="text-center">{{teamreg.get_fairplay_score|floatformat:2}}</td>
+                                            <td class="text-left"><a href="{% url 'single-team' %}?team={{teamreg.team.id}}">{{teamreg.team.name}}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+{% endblock %}

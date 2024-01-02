@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- Section Area - Content Central -->
+            <section class="content-info">
+
+                <div class="container paddings">
+                    <!-- Content Text-->
+                    <div class="panel-box block-form">
+                        <div class="titles text-center">
+                            {% block title %}
+                            {% endblock %}
+                        </div>
+
+                        <div class="info-panel">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    {% block description %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+
+                            {% block form %}{% endblock %}
+                        </div>
+
+                    </div>
+                    <!-- End Content Text-->
+                </div>
+
+            </section>
+            <!-- End Section Area -  Content Central -->
+
+{% endblock %}

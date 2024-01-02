@@ -1,0 +1,76 @@
+{% load static %}
+                        <li class="current">
+                            <a href="#">Início</a>
+                                <ul class="sub-current">
+                                    {% for each_season in all_seasons %}
+                                    <li><a href="{% url 'set_season' %}?season={{each_season.id}}">{{ each_season.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'groups' %}">Grupos</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li><a href="{% url 'groups' %}?tournament={{tournament.id}}">{{ tournament.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'fixtures' %}">Jogos</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li><a href="{% url 'fixtures' %}?tournament={{tournament.id}}">{{ tournament.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'teams' %}">Times</a>
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li><a href="{% url 'teams' %}?tournament={{tournament.id}}">{{ tournament.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'players' %}">Jogadores</a>
+                            {% if all_tournaments_season %}
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li><a href="{% url 'players' %}?tournament={{tournament.id}}">{{ tournament.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'awards' %}">Premiações</a>
+                            {% if all_tournaments_season %}
+                                <ul class="sub-current">
+                                    {% for tournament in all_tournaments_season %}
+                                    <li><a href="{% url 'awards' %}?tournament={{tournament.id}}">{{ tournament.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+
+                        <li class="current">
+                            <a href="{% url 'contact' %}">Contato</a>
+                        </li>
+
+                        <li class="current">
+                            {% if request.user.is_authenticated %}
+                            <a href="#">{{ request.user }}</a>
+                                <ul class="sub-current">
+                                    <li><a href="{% url 'person-data' %}">Meus Dados</a></li>
+                                    {% if request.user.is_superuser or is_referee %}<li><a href="{% url 'fixtures-input' %}">Abrir súmulas</a></li>{% endif %}
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            {% else %}
+                            <a href="{% url 'login' %}">Login</a>
+                            {% endif %}
+                        </li>
+

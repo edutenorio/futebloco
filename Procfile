@@ -1,0 +1,1 @@
+web: gunicorn futebloco.wsgi --log-file -
