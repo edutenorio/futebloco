@@ -11,21 +11,23 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+if DEBUG:
+    load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = ['futebloco-bbd8d7ca66b2.herokuapp.com']
 
@@ -75,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'futebloco.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -87,7 +88,9 @@ WSGI_APPLICATION = 'futebloco.wsgi.application'
 #     }
 # }
 
-DATABASES = {'default': dj_database_url.config(conn_max_age=600, ssl_require=True)}
+DATABASE_URL = os.environ.get('DATABASE_URL') if not DEBUG else os.getenv('DATABASE_URL')
+
+DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600, ssl_require=True)}
 
 
 # Password validation
@@ -142,5 +145,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'futebloco@gmail.com'
-EMAIL_HOST_PASSWORD = 'futebloco2015'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
