@@ -79,15 +79,7 @@ WSGI_APPLICATION = 'futebloco.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgresql-symmetrical-82891',
-#         'CONN_MAX_AGE': 500,
-#     }
-# }
-
-DATABASE_URL = os.environ.get('DATABASE_URL') if not DEBUG else os.getenv('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600, ssl_require=True)}
 
