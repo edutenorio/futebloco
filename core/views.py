@@ -122,23 +122,23 @@ class SingleResultView(TemplateView):
                 [
                     (p.shirtno, ),
                     (p.person.short, ),
-                    (p.get_goal_count_at_match(context['match']), p.id, t.id, 'goal'),
-                    (p.get_foul_count_at_match(context['match']), p.id, t.id, 'foul'),
-                    (p.get_yellowcard_count_at_match(context['match']), p.id, t.id, 'yellow card'),
-                    (p.get_redcard_count_at_match(context['match']), p.id, t.id, 'red card'),
-                    (p.get_owngoal_count_at_match(context['match']), p.id, t.id, 'own goal'),
-                    (p.get_tiebreakgoal_count_at_match(context['match']), p.id, t.id, 'tie-break penalty goal'),
+                    (p.get_goal_count_at_match(match), p.id, t.id, 'goal'),
+                    (p.get_foul_count_at_match(match), p.id, t.id, 'foul'),
+                    (p.get_yellowcard_count_at_match(match), p.id, t.id, 'yellow card'),
+                    (p.get_redcard_count_at_match(match), p.id, t.id, 'red card'),
+                    (p.get_owngoal_count_at_match(match), p.id, t.id, 'own goal'),
+                    (p.get_tiebreakgoal_count_at_match(match), p.id, t.id, 'tie-break penalty goal'),
                 ]
                 for p in PlayerTournamentRegistration.objects.filter(teamreg=t)
             ]
-            for t in [context['match'].hometeamreg, context['match'].awayteamreg]
+            for t in [match.hometeamreg, match.awayteamreg]
         ]
         team_tables[0].sort(key=lambda x: try_int(x[0][0]))
         team_tables[1].sort(key=lambda x: try_int(x[0][0]))
         context['match'] = match
         context['matchevents'] = matchevents
         context['team_tables'] = team_tables
-        context['gmaplink'] = gmaplink(context['match'].venue.address)
+        context['gmaplink'] = gmaplink(match.venue.address)
         context['input_permission'] = False
         return context
 
@@ -368,23 +368,23 @@ class MatchInputView(PermissionRequiredMixin, TemplateView):
                 [
                     (p.shirtno, ),
                     (p.person.short, ),
-                    (p.get_goal_count_at_match(context['match']), p.id, t.id, 'goal'),
-                    (p.get_foul_count_at_match(context['match']), p.id, t.id, 'foul'),
-                    (p.get_yellowcard_count_at_match(context['match']), p.id, t.id, 'yellow card'),
-                    (p.get_redcard_count_at_match(context['match']), p.id, t.id, 'red card'),
-                    (p.get_owngoal_count_at_match(context['match']), p.id, t.id, 'own goal'),
-                    (p.get_tiebreakgoal_count_at_match(context['match']), p.id, t.id, 'tie-break penalty goal'),
+                    (p.get_goal_count_at_match(match), p.id, t.id, 'goal'),
+                    (p.get_foul_count_at_match(match), p.id, t.id, 'foul'),
+                    (p.get_yellowcard_count_at_match(match), p.id, t.id, 'yellow card'),
+                    (p.get_redcard_count_at_match(match), p.id, t.id, 'red card'),
+                    (p.get_owngoal_count_at_match(match), p.id, t.id, 'own goal'),
+                    (p.get_tiebreakgoal_count_at_match(match), p.id, t.id, 'tie-break penalty goal'),
                 ]
                 for p in PlayerTournamentRegistration.objects.filter(teamreg=t)
             ]
-            for t in [context['match'].hometeamreg, context['match'].awayteamreg]
+            for t in [match.hometeamreg, match.awayteamreg]
         ]
         team_tables[0].sort(key=lambda x: try_int(x[0][0]))
         team_tables[1].sort(key=lambda x: try_int(x[0][0]))
         context['match'] = match
         context['matchevents'] = matchevents
         context['team_tables'] = team_tables
-        context['gmaplink'] = gmaplink(context['match'].venue.address)
+        context['gmaplink'] = gmaplink(match.venue.address)
         context['input_permission'] = True
         return context
 
