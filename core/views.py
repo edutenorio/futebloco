@@ -110,18 +110,20 @@ class SingleResultView(TemplateView):
         context = super().get_context_data(**kwargs)
         match = Match.objects.get(id=kwargs['match_id'])
         matchevents = MatchEvent.objects.filter(match=match)
-        team_tables = [[[
-            (p.shirtno, ),
-            (p.person.short, ),
-            (p.get_goal_count_at_match(match), p.id, teamreg.id, 'goal'),
-            (p.get_foul_count_at_match(match), p.id, teamreg.id, 'foul'),
-            (p.get_yellowcard_count_at_match(match), p.id, teamreg.id, 'yellow card'),
-            (p.get_redcard_count_at_match(match), p.id, teamreg.id, 'red card'),
-            (p.get_owngoal_count_at_match(match), p.id, teamreg.id, 'own goal'),
-            (p.get_tiebreakgoal_count_at_match(match), p.id, teamreg.id, 'tie-break penalty goal'),
-        ] for p in PlayerTournamentRegistration.objects.filter(teamreg=teamreg).annotate(
-            intshirtno=Cast('shirtno', IntegerField())).order_by('intshirtno', 'shirtno')
-        ] for teamreg in [context['match'].hometeamreg, context['match'].awayteamreg]]
+        team_tables = []
+        for t in [match.hometeamreg, match.awayteamreg]:
+            table = []
+            for p in PlayerTournamentRegistration.objects.filter(teamreg=t).annotate(
+                    intshirtno=Cast('shirtno', IntegerField())).order_by('intshirtno', 'shirtno'):
+                table.append([(p.shirtno, ),
+                              (p.person.short, ),
+                              (p.get_goal_count_at_match(match), p.id, t.id, 'goal'),
+                              (p.get_foul_count_at_match(match), p.id, t.id, 'foul'),
+                              (p.get_yellowcard_count_at_match(match), p.id, t.id, 'yellow card'),
+                              (p.get_redcard_count_at_match(match), p.id, t.id, 'red card'),
+                              (p.get_owngoal_count_at_match(match), p.id, t.id, 'own goal'),
+                              (p.get_tiebreakgoal_count_at_match(match), p.id, t.id, 'tie-break penalty goal')])
+            team_tables.append(table)
         context['match'] = match
         context['matchevents'] = matchevents
         context['gmaplink'] = gmaplink(match.venue.address)
@@ -348,26 +350,26 @@ class MatchInputView(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['match'] = Match.objects.get(id=kwargs['match_id'])
-        context['matchevents'] = MatchEvent.objects.filter(match=context['match'])
+        match = Match.objects.get(id=kwargs['match_id'])
+        matchevents = MatchEvent.objects.filter(match=match)
+        team_tables = []
+        for t in [match.hometeamreg, match.awayteamreg]:
+            table = []
+            for p in PlayerTournamentRegistration.objects.filter(teamreg=t).annotate(
+                    intshirtno=Cast('shirtno', IntegerField())).order_by('intshirtno', 'shirtno'):
+                table.append([(p.shirtno, ),
+                              (p.person.short, ),
+                              (p.get_goal_count_at_match(match), p.id, t.id, 'goal'),
+                              (p.get_foul_count_at_match(match), p.id, t.id, 'foul'),
+                              (p.get_yellowcard_count_at_match(match), p.id, t.id, 'yellow card'),
+                              (p.get_redcard_count_at_match(match), p.id, t.id, 'red card'),
+                              (p.get_owngoal_count_at_match(match), p.id, t.id, 'own goal'),
+                              (p.get_tiebreakgoal_count_at_match(match), p.id, t.id, 'tie-break penalty goal')])
+            team_tables.append(table)
+        context['match'] = match
+        context['matchevents'] = matchevents
         context['gmaplink'] = gmaplink(context['match'].venue.address)
-        context['team_tables'] = [
-            [
-                [
-                    (p.shirtno, ),
-                    (p.person.short, ),
-                    (p.get_goal_count_at_match(context['match']), p.id, teamreg.id, 'goal'),
-                    (p.get_foul_count_at_match(context['match']), p.id, teamreg.id, 'foul'),
-                    (p.get_yellowcard_count_at_match(context['match']), p.id, teamreg.id, 'yellow card'),
-                    (p.get_redcard_count_at_match(context['match']), p.id, teamreg.id, 'red card'),
-                    (p.get_owngoal_count_at_match(context['match']), p.id, teamreg.id, 'own goal'),
-                    (p.get_tiebreakgoal_count_at_match(context['match']), p.id, teamreg.id, 'tie-break penalty goal'),
-                ]
-                for p in PlayerTournamentRegistration.objects.filter(teamreg=teamreg).annotate(
-                    intshirtno=Cast('shirtno', IntegerField())).order_by('intshirtno', 'shirtno')
-            ]
-            for teamreg in [context['match'].hometeamreg, context['match'].awayteamreg]
-        ]
+        context['team_tables'] = team_tables
         context['input_permission'] = True
         return context
 
